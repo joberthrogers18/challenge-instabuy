@@ -1,81 +1,71 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'dart:async';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:developer';
+//
+//     final payload = payloadFromJson(jsonString);
 
-class Banner {
-  final String image;
+import 'dart:convert';
 
-  Banner({this.image});
+List<Payload> payloadFromJson(String str) => List<Payload>.from(
+    json.decode(str)['data']['banners'].map((x) => Payload.fromJson(x)));
 
-  factory Banner.fromJson(Map<String, dynamic> json) {
-    return Banner(image: json['image']);
-  }
+String payloadToJson(List<Payload> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Payload {
+  String image;
+
+  Payload({
+    this.image,
+  });
+
+  factory Payload.fromJson(Map<String, dynamic> json) => Payload(
+        image: json["image"] == null ? null : json["image"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "image": image == null ? null : image,
+      };
 }
 
-List<Banner> parseBanners(String responseBody) {
-  final parsed = jsonDecode(responseBody);
-
-  return parsed['data']['banners']
-      .map<Banner>((json) => Banner.fromJson(json))
-      .toList();
-}
-
-Future<List<Banner>> fetchBanners() async {
-  final response = await http
-      .get('https://api.instabuy.com.br/apiv3/layout?subdomain=bigboxdelivery');
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return parseBanners(response.body);
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load banners');
-  }
-}
-
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'InstaBuy',
+      title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.teal,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
       ),
-      home: InstaBuyHomePage(title: 'InstaBuy'),
+      home: SponsorSlider(),
     );
   }
 }
 
-class InstaBuyHomePage extends StatefulWidget {
-  InstaBuyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class SponsorSlider extends StatefulWidget {
   @override
-  _InstaBuyHomePageState createState() => _InstaBuyHomePageState();
+  _SponsorSliderState createState() => _SponsorSliderState();
 }
 
-class _InstaBuyHomePageState extends State<InstaBuyHomePage> {
-  Future<List<Banner>> futureBanner;
-
-  Function(Banner e) get banner => null;
-
-  @override
-  void initState() {
-    super.initState();
-    futureBanner = fetchBanners();
+class _SponsorSliderState extends State<SponsorSlider> {
+  Future<List<Payload>> getSponsorSlide() async {
+    //final response = await http.get("getdata.php");
+    //return json.decode(response.body);
+    http.Response response = await http.get(
+        "https://api.instabuy.com.br/apiv3/layout?subdomain=bigboxdelivery");
+    var payloadList = payloadFromJson(response.body);
+    return payloadList;
   }
 
   @override
@@ -85,83 +75,71 @@ class _InstaBuyHomePageState extends State<InstaBuyHomePage> {
         // Here we take the value from the InstaBuyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         leading: Icon(Icons.shopping_cart),
-        title: Text(widget.title),
+        title: Text('InstaBuy'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
-              child: Text(
-                'Seja Bem Vindo ao InstaBuy',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(57, 54, 109, 1)),
-              ),
-            ),
-            // CarouselSlider(
-            //   options: CarouselOptions(
-            //     height: 200.0,
-            //     enableInfiniteScroll: true,
-            //     autoPlay: true,
-            //     autoPlayInterval: Duration(seconds: 7),
-            //   ),
-            //   items: [1, 2, 3, 4, 5].map((i) {
-            //     return Builder(
-            //       builder: (BuildContext context) {
-            //         return Container(
-            //             width: MediaQuery.of(context).size.width,
-            //             margin:
-            //                 EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
-            //             decoration: BoxDecoration(color: Colors.grey[300]),
-            //             child: Image(
-            //               image: NetworkImage(
-            //                   'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-            //             ));
-            //       },
-            //     );
-            //   }).toList(),
-            // ),
-            FutureBuilder<List<Banner>>(
-              future: fetchBanners(),
-              builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  print(snapshot.data);
-                  return Container(
-                      child: Row(
-                    children: <Widget>[
-                      Expanded(
-                          child: Column(
-                        children: <Widget>[
-                          ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                title: Text(snapshot.data[index].image),
-                              );
-                            },
-                            itemCount: snapshot.data.length,
-                          )
-                        ],
-                      ))
-                    ],
-                  ));
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-
-                // By default, show a loading spinner.
-                return CircularProgressIndicator();
-              },
-            ),
-          ],
+      body: Container(
+        child: Card(
+          child: new FutureBuilder<List<Payload>>(
+            future: getSponsorSlide(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              return snapshot.hasData
+                  ? new SponsorList(
+                      list: snapshot.data,
+                    )
+                  : new Center(child: new CircularProgressIndicator());
+            },
+          ),
         ),
       ),
-      floatingActionButton: null,
+    );
+  }
+}
+
+class SponsorList extends StatefulWidget {
+  final List<Payload> list;
+  SponsorList({this.list});
+
+  @override
+  _SponsorListState createState() => _SponsorListState();
+}
+
+class _SponsorListState extends State<SponsorList> {
+  int _current = 0;
+
+  int index = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 200.0,
+              initialPage: 0,
+              autoPlay: true,
+              autoPlayInterval: Duration(seconds: 7),
+              reverse: false,
+            ),
+            items: widget.list.map((imageUrl) {
+              return Builder(builder: (BuildContext context) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.symmetric(horizontal: 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                  ),
+                  child: Image.network(
+                    'https://assets.instabuy.com.br/ib.store.banner/bnr-${imageUrl.image}',
+                    fit: BoxFit.fill,
+                  ),
+                );
+              });
+            }).toList(),
+          )
+        ],
+      ),
     );
   }
 }
