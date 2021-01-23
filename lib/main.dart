@@ -1,37 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:http/http.dart' as http;
-//
-//     final payload = payloadFromJson(jsonString);
-
-import 'dart:convert';
-
-List<Payload> payloadFromJson(String str) => List<Payload>.from(
-    json.decode(str)['data']['banners'].map((x) => Payload.fromJson(x)));
-
-String payloadToJson(List<Payload> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-class Payload {
-  String image;
-
-  Payload({
-    this.image,
-  });
-
-  factory Payload.fromJson(Map<String, dynamic> json) => Payload(
-        image: json["image"] == null ? null : json["image"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "image": image == null ? null : image,
-      };
-}
+import 'package:challengeinstabuy/blocs/search_bloc.dart';
+import 'package:challengeinstabuy/details/DetailsWidget.dart';
+import 'package:challengeinstabuy/models/SearchItem.dart';
+import 'package:challengeinstabuy/models/SearchResult.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,105 +15,98 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SponsorSlider(),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class SponsorSlider extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
   @override
-  _SponsorSliderState createState() => _SponsorSliderState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _SponsorSliderState extends State<SponsorSlider> {
-  Future<List<Payload>> getSponsorSlide() async {
-    //final response = await http.get("getdata.php");
-    //return json.decode(response.body);
-    http.Response response = await http.get(
-        "https://api.instabuy.com.br/apiv3/layout?subdomain=bigboxdelivery");
-    var payloadList = payloadFromJson(response.body);
-    return payloadList;
+class _MyHomePageState extends State<MyHomePage> {
+  SearchBloc _searchBloc;
+
+  @override
+  void initState() {
+    _searchBloc = SearchBloc();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchBloc?.dispose();
+    super.dispose();
+  }
+
+  Widget _textField() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        onChanged: _searchBloc.searchEvent.add,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "Digite o nome do repositório",
+          labelText: "Pesquisa",
+        ),
+      ),
+    );
+  }
+
+  Widget _items(SearchItem item) {
+    print("teste");
+
+    return ListTile(
+      leading: Hero(
+        tag: item.url,
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(item?.avatarUrl ??
+              "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/VCHXZQKsxil3lhgr4/animation-loading-circle-icon-on-white-background-with-alpha-channel-4k-video_sjujffkcde_thumbnail-full01.png"),
+        ),
+      ),
+      title: Text(item?.fullName ?? "title"),
+      subtitle: Text(item?.url ?? "url"),
+      onTap: () => Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => DetailsWidget(
+            item: item,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the InstaBuyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        leading: Icon(Icons.shopping_cart),
-        title: Text('InstaBuy'),
+        title: Text("Github Search"),
       ),
-      body: Container(
-        child: Card(
-          child: new FutureBuilder<List<Payload>>(
-            future: getSponsorSlide(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) print(snapshot.error);
-              return snapshot.hasData
-                  ? new SponsorList(
-                      list: snapshot.data,
-                    )
-                  : new Center(child: new CircularProgressIndicator());
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SponsorList extends StatefulWidget {
-  final List<Payload> list;
-  SponsorList({this.list});
-
-  @override
-  _SponsorListState createState() => _SponsorListState();
-}
-
-class _SponsorListState extends State<SponsorList> {
-  int _current = 0;
-
-  int index = 1;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
+      body: ListView(
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 20),
-            child: Text(
-              'Seja Bem Vindo ao InstaBuy',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(57, 54, 109, 1)),
-            ),
-          ),
-          CarouselSlider(
-            options: CarouselOptions(
-              height: 200.0,
-              initialPage: 0,
-              autoPlay: true,
-              autoPlayInterval: Duration(seconds: 7),
-              reverse: false,
-            ),
-            items: widget.list.map((imageUrl) {
-              return Builder(builder: (BuildContext context) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                  ),
-                  child: Image.network(
-                    'https://assets.instabuy.com.br/ib.store.banner/bnr-${imageUrl.image}',
-                    fit: BoxFit.fill,
-                  ),
-                );
-              });
-            }).toList(),
+          _textField(),
+          StreamBuilder<SearchResult>(
+            stream: _searchBloc.apiResultFlux,
+            builder:
+                (BuildContext context, AsyncSnapshot<SearchResult> snapshot) {
+              return snapshot.hasData
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: snapshot.data.items.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        SearchItem item = snapshot.data.items[index];
+                        return _items(item);
+                      },
+                    )
+                  : Center(child: CircularProgressIndicator());
+            },
           )
         ],
       ),
