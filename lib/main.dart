@@ -4,6 +4,8 @@ import 'package:challengeinstabuy/blocs/search_bloc.dart';
 import 'package:challengeinstabuy/details/DetailsWidget.dart';
 import 'package:challengeinstabuy/models/SearchItem.dart';
 import 'package:challengeinstabuy/models/SearchResult.dart';
+import 'package:challengeinstabuy/components/item.dart';
+import 'package:challengeinstabuy/services/data/github_service.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,9 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'InstaBuy',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -58,41 +60,22 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _items(SearchItem item) {
-    print("teste");
-
-    return ListTile(
-      leading: Hero(
-        tag: item.url,
-        child: CircleAvatar(
-          backgroundImage: NetworkImage(item?.avatarUrl ??
-              "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/VCHXZQKsxil3lhgr4/animation-loading-circle-icon-on-white-background-with-alpha-channel-4k-video_sjujffkcde_thumbnail-full01.png"),
-        ),
-      ),
-      title: Text(item?.fullName ?? "title"),
-      subtitle: Text(item?.url ?? "url"),
-      onTap: () => Navigator.push(
-        context,
-        CupertinoPageRoute(
-          builder: (context) => DetailsWidget(
-            item: item,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    GitHubService _service = GitHubService();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Github Search"),
+        leading: Icon(
+          Icons.shopping_cart
+        ),
+        title: Text("InstaBuy"),
       ),
       body: ListView(
         children: <Widget>[
-          _textField(),
-          StreamBuilder<SearchResult>(
-            stream: _searchBloc.apiResultFlux,
+          // _textField(),
+          FutureBuilder<SearchResult>(
+            future: _service.search('teste'),
             builder:
                 (BuildContext context, AsyncSnapshot<SearchResult> snapshot) {
               return snapshot.hasData
@@ -102,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       itemCount: snapshot.data.items.length,
                       itemBuilder: (BuildContext context, int index) {
                         SearchItem item = snapshot.data.items[index];
-                        return _items(item);
+                        return items(context, item);
                       },
                     )
                   : Center(child: CircularProgressIndicator());
