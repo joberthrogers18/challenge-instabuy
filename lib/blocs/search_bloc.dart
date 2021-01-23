@@ -1,15 +1,15 @@
-import 'package:challengeinstabuy/models/SearchResult.dart';
-import 'package:challengeinstabuy/services/data/github_service.dart';
+import 'package:challengeinstabuy/models/BannerResult.dart';
+import 'package:challengeinstabuy/services/data/instaBuyService.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SearchBloc {
-  GitHubService _service = GitHubService();
+  InstaBuyService _service = InstaBuyService();
 
   final _searchController = BehaviorSubject<String>();
   Observable<String> get searchFlux => _searchController.stream;
   Sink<String> get searchEvent => _searchController.sink;
 
-  Observable<SearchResult> apiResultFlux;
+  Observable<BannerResult> apiResultFlux;
 
   SearchBloc() {
     apiResultFlux = searchFlux
