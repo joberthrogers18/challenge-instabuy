@@ -68,57 +68,65 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.shopping_cart
-        ),
+        leading: Icon(Icons.shopping_cart),
         title: Text("InstaBuy"),
       ),
       body: ListView(
         children: <Widget>[
           // _textField(),
-          FutureBuilder<BannerResult>(
-            future: _service.search(''),
-            builder:
-                (BuildContext context, AsyncSnapshot<BannerResult> snapshot) {
-              return snapshot.hasData
-                  ? CarouselSlider(
-                options: CarouselOptions(
-                  height: 200.0,
-                  initialPage: 0,
-                  autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 7),
-                  reverse: false,
-                ),
-                items: snapshot.data.items.map<Widget>((item) {
-                  return new ListTile(
-                    title: new Image.network(
-                        'https://assets.instabuy.com.br/ib.store.banner/bnr-${item.image}'
-                    ),
-                    subtitle: new Text("Class"),
-                  );
-                }).toList(),
-
-              )
-                  : Center(child: CircularProgressIndicator());
-            },
+          Container(
+            child: Text(
+              'Bem vindo ao InstaBuy',
+              style: TextStyle(
+                  color: Colors.grey[700],
+                  fontFamily: 'RobotoMono',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+            ),
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(20.0),
           ),
           FutureBuilder<BannerResult>(
             future: _service.search(''),
             builder:
                 (BuildContext context, AsyncSnapshot<BannerResult> snapshot) {
               return snapshot.hasData
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: snapshot.data.items.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        BannerItem item = snapshot.data.items[index];
-                        return bannerCollections(context, item);
-                      },
+                  ? CarouselSlider(
+                      options: CarouselOptions(
+                        height: 200.0,
+                        initialPage: 0,
+                        autoPlay: true,
+                        autoPlayInterval: Duration(seconds: 7),
+                        reverse: false,
+                      ),
+                      items: snapshot.data.items.map<Widget>((item) {
+                        return new ListTile(
+                          title: new Image.network(
+                            'https://assets.instabuy.com.br/ib.store.banner/bnr-${item.image}',
+                          ),
+                        );
+                      }).toList(),
                     )
                   : Center(child: CircularProgressIndicator());
             },
-          )
+          ),
+          // FutureBuilder<BannerResult>(
+          //   future: _service.search(''),
+          //   builder:
+          //       (BuildContext context, AsyncSnapshot<BannerResult> snapshot) {
+          //     return snapshot.hasData
+          //         ? ListView.builder(
+          //             shrinkWrap: true,
+          //             physics: ClampingScrollPhysics(),
+          //             itemCount: snapshot.data.items.length,
+          //             itemBuilder: (BuildContext context, int index) {
+          //               BannerItem item = snapshot.data.items[index];
+          //               return bannerCollections(context, item);
+          //             },
+          //           )
+          //         : Center(child: CircularProgressIndicator());
+          //   },
+          // )
         ],
       ),
     );
