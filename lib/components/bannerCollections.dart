@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 Widget bannerCollections(BuildContext context, BannerItem item) {
 
   return ListTile(
-    title: Text(item?.image ?? ""),
+    title: Image.network(
+        'https://assets.instabuy.com.br/ib.store.banner/bnr-${item.image}'
+    ),
     subtitle: Text(item?.id ?? ""),
     // onTap: () => Navigator.push(
     //   context,
