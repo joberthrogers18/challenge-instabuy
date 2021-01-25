@@ -15,6 +15,27 @@ class DetailsProduct extends StatefulWidget {
 }
 
 class _DetailsProduct extends State<DetailsProduct> {
+  String _htmlTransform(String html) {
+    var htmlSplit = html.split('<br>');
+
+    var parserBr = htmlSplit.where((e) => e.length > 50 ).toList();
+
+    if (parserBr.isNotEmpty) {
+      var removeHeaders = parserBr[0].split(new RegExp(r"<\/?h?[0-6]>"));
+      var getDescription = removeHeaders.where((e) => e.length > 50 ).toList();
+
+      if (getDescription.length > 0) {
+        if (getDescription[0].length > 270) {
+          return '${getDescription[0].substring(0, 270)}...';
+        }
+
+        return getDescription[0];
+      }
+    }
+
+    return 'Sem Descrição';
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -89,22 +110,27 @@ class _DetailsProduct extends State<DetailsProduct> {
                           ),
                         height: 150,
                         padding: EdgeInsets.all(10),
-                        child: Wrap(
+                        child: Column(
                           children: <Widget>[
-                            Container(
+                            Expanded(
                               child: Text(
                                 'Descrição:',
+                                textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15
                                 ),
                               ),
-                              alignment: Alignment.topLeft,
-                              margin: EdgeInsets.only(bottom: 10),
+                              // alignment: Alignment.topLeft,
+                              // margin: EdgeInsets.only(bottom: 10),
+                              flex: 1,
                             ),
-                            Html(
-                                data: widget.description != '' ? (widget.description.split('\">')[1]) : 'Sem Descrição',
-                            ),
+                            Expanded(
+                              child: Html(
+                                data: _htmlTransform(widget.description),
+                              ),
+                              flex: 4,
+                            )
                           ],
                         )
                       )
