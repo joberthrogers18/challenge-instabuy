@@ -26,9 +26,9 @@ Widget carousel() {
                     margin: EdgeInsets.all(5),
                     height: 200,
                     child: Image.network(
-                      'https://assets.instabuy.com.br/ib.store.banner/bnr-${item.image}',
-                      height: 400,
-                    ));
+                        'https://assets.instabuy.com.br/ib.store.banner/bnr-${item.image}',
+                        height: 400,
+                        fit: BoxFit.fitWidth));
               }).toList(),
             )
           : Text('');

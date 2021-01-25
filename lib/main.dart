@@ -177,7 +177,21 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       },
                     )
-                  : Center(child: CircularProgressIndicator());
+                  : Container(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.55,
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 6, // 60% of space => (6/(6 + 4))
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
             },
           )
         ],
