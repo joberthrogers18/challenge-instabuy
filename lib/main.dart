@@ -1,6 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:challengeinstabuy/components/bannerCollections.dart';
-import 'package:challengeinstabuy/models/BannerResult.dart';
 import 'package:challengeinstabuy/models/GroupProducts.dart';
 import 'package:challengeinstabuy/models/ProductItem.dart';
 import 'package:challengeinstabuy/models/ProductsResults.dart';
@@ -18,9 +15,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'InstaBuy',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -80,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         leading: Icon(Icons.shopping_cart),
         title: Text("InstaBuy"),
+        backgroundColor: Color(0xFF0071CE),
       ),
       body: ListView(
         children: <Widget>[
@@ -88,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               'Bem vindo ao InstaBuy',
               style: TextStyle(
-                  color: Colors.grey[700],
+                  color: Color(0xFF041E42),
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.bold,
                   fontSize: 20),
@@ -116,17 +111,18 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: Text(
                                 group.title,
                                 style: TextStyle(
-                                    color: Colors.grey[700],
+                                    color: Color(0xFF041E42),
                                     fontFamily: 'Roboto',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20),
                               ),
                               alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.only(
+                                  top: 20, left: 10, right: 10, bottom: 0),
                             ),
                             new Container(
                               margin: EdgeInsets.symmetric(vertical: 20.0),
-                              height: 220.0,
+                              height: 250.0,
                               child: new ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: group.products.length,
@@ -135,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ProductItem product =
                                       group.products[indexProduct];
                                   return Container(
-                                    width: 150,
+                                    width: 170,
                                     padding: EdgeInsets.only(top: 10),
                                     margin: EdgeInsets.all(10),
                                     decoration: BoxDecoration(
@@ -159,14 +155,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                       children: <Widget>[
                                         Image.network(
                                             'https://assets.instabuy.com.br/ib.item.image.small/s-${product.image}'),
-                                        Text(
-                                          _textFormat(product.name),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                        Text(
-                                          'R\$: ${product.price}',
-                                          textAlign: TextAlign.left,
-                                        )
+                                        Container(
+                                            margin: EdgeInsets.only(
+                                                top: 10, bottom: 5),
+                                            child: Text(
+                                              _textFormat(product.name),
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500),
+                                            )),
+                                        Container(
+                                            margin: EdgeInsets.only(bottom: 5),
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 24),
+                                            child: Text(
+                                              'R\$: ${product.price.toStringAsFixed(2)}',
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF0071CE),
+                                                  fontSize: 20),
+                                            )),
                                       ],
                                     ),
                                   );
