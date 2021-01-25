@@ -11,8 +11,6 @@ import 'package:challengeinstabuy/details/DetailsWidget.dart';
 import 'package:challengeinstabuy/services/data/instaBuyService.dart';
 import 'package:challengeinstabuy/components/Caroseul.dart';
 
-import 'models/BannerItem.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -65,6 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
   //     ),
   //   );
   // }
+
+  String _textFormat(String value) {
+    if (value.length > 20) {
+      return value.substring(0, 18);
+    }
+
+    return value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             new Container(
                               margin: EdgeInsets.symmetric(vertical: 20.0),
-                              height: 200.0,
+                              height: 220.0,
                               child: new ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: group.products.length,
@@ -128,13 +134,41 @@ class _MyHomePageState extends State<MyHomePage> {
                                     (BuildContext context, int indexProduct) {
                                   ProductItem product =
                                       group.products[indexProduct];
-                                  return Column(
-                                    children: <Widget>[
-                                      Image.network(
-                                          'https://assets.instabuy.com.br/ib.item.image.small/s-${product.image}'),
-                                      Text(product.name),
-                                      Text('${product.price}')
-                                    ],
+                                  return Container(
+                                    width: 150,
+                                    padding: EdgeInsets.only(top: 10),
+                                    margin: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 5,
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Image.network(
+                                            'https://assets.instabuy.com.br/ib.item.image.small/s-${product.image}'),
+                                        Text(
+                                          _textFormat(product.name),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        Text(
+                                          'R\$: ${product.price}',
+                                          textAlign: TextAlign.left,
+                                        )
+                                      ],
+                                    ),
                                   );
                                 },
                               ),
