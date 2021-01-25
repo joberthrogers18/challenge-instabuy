@@ -13,6 +13,8 @@ Widget carousel() {
       return snapshot.hasData
           ? CarouselSlider(
               options: CarouselOptions(
+                aspectRatio: 16 / 9,
+                viewportFraction: 0.9,
                 height: 200.0,
                 initialPage: 0,
                 autoPlay: true,
@@ -20,14 +22,16 @@ Widget carousel() {
                 reverse: false,
               ),
               items: snapshot.data.items.map<Widget>((item) {
-                return new ListTile(
-                  title: new Image.network(
-                    'https://assets.instabuy.com.br/ib.store.banner/bnr-${item.image}',
-                  ),
-                );
+                return new Container(
+                    margin: EdgeInsets.all(5),
+                    height: 200,
+                    child: Image.network(
+                      'https://assets.instabuy.com.br/ib.store.banner/bnr-${item.image}',
+                      height: 400,
+                    ));
               }).toList(),
             )
-          : Center(child: CircularProgressIndicator());
+          : Text('');
     },
   );
 }
