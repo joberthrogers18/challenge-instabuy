@@ -4,9 +4,10 @@ import 'package:challengeinstabuy/models/ProductsResults.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:challengeinstabuy/blocs/search_bloc.dart';
-import 'package:challengeinstabuy/details/DetailsWidget.dart';
+import 'package:challengeinstabuy/details/DetailsProduct.dart';
 import 'package:challengeinstabuy/services/data/instaBuyService.dart';
 import 'package:challengeinstabuy/components/Caroseul.dart';
+import 'package:challengeinstabuy/details/DetailsProduct.dart';
 
 void main() => runApp(MyApp());
 
@@ -125,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               padding: const EdgeInsets.only(
                                   top: 20, left: 10, right: 10, bottom: 0),
                             ),
-                            new Container(
+                            Container(
                               margin: EdgeInsets.symmetric(vertical: 20.0),
                               height: 250.0,
                               child: new ListView.builder(
@@ -156,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ],
                                     ),
-                                    child: Column(
+                                    child: new InkWell(child: Column(
                                       children: <Widget>[
                                         Image.network(
                                             'https://assets.instabuy.com.br/ib.item.image.small/s-${product.image}'),
@@ -185,11 +186,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   fontSize: 20),
                                             )),
                                       ],
-                                    ),
+                                    ),onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => DetailsProduct(
+                                          name: product.name,
+                                          image: product.image,
+                                          price: product.price,
+                                          description: product.description
+                                        )),
+                                      );
+                                    }) ,
                                   );
                                 },
                               ),
-                            )
+                            ),
                           ],
                         );
                       },
