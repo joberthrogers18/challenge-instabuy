@@ -141,7 +141,37 @@ class _DetailsProduct extends State<DetailsProduct> {
               Expanded(
                 flex: 1,
                 child: Container(
-                  color: Colors.blueAccent,
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all(10),
+                  child: FlatButton(
+                    color: Color(0xFF0071CE),
+                    textColor: Colors.white,
+                    disabledColor: Colors.grey,
+                    disabledTextColor: Colors.black,
+                    padding: EdgeInsets.all(8.0),
+                    splashColor: Colors.blueAccent,
+                    onPressed: () {},
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.shopping_bag),
+                          Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: Text(
+                                'Adicionar a Sacola',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            )
+                          )
+                        ],
+                      ),
+                    )
+                  ),
                 ),
               ),
             ],
