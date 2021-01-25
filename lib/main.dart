@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:challengeinstabuy/components/bannerCollections.dart';
 import 'package:challengeinstabuy/models/BannerResult.dart';
+import 'package:challengeinstabuy/models/GroupProducts.dart';
+import 'package:challengeinstabuy/models/ProductsResults.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:challengeinstabuy/blocs/search_bloc.dart';
@@ -88,23 +90,24 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.all(20.0),
           ),
           carousel(),
-          // FutureBuilder<BannerResult>(
-          //   future: _service.search(''),
-          //   builder:
-          //       (BuildContext context, AsyncSnapshot<BannerResult> snapshot) {
-          //     return snapshot.hasData
-          //         ? ListView.builder(
-          //             shrinkWrap: true,
-          //             physics: ClampingScrollPhysics(),
-          //             itemCount: snapshot.data.items.length,
-          //             itemBuilder: (BuildContext context, int index) {
-          //               BannerItem item = snapshot.data.items[index];
-          //               return bannerCollections(context, item);
-          //             },
-          //           )
-          //         : Center(child: CircularProgressIndicator());
-          //   },
-          // )
+          FutureBuilder<ProductResults>(
+            future: _service.searchProducts(),
+            builder:
+                (BuildContext context, AsyncSnapshot<ProductResults> snapshot) {
+              return snapshot.hasData
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: snapshot.data.groupsProducts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        GroupProduct group =
+                            snapshot.data.groupsProducts[index];
+                        return Text(group.title);
+                      },
+                    )
+                  : Center(child: CircularProgressIndicator());
+            },
+          )
         ],
       ),
     );
