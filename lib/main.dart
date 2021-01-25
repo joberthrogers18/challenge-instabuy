@@ -76,6 +76,11 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("InstaBuy"),
         backgroundColor: Color(0xFF0071CE),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.chat_bubble),
+        backgroundColor: Color(0xFF0071CE),
+      ),
       body: ListView(
         children: <Widget>[
           // _textField(),
@@ -131,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ProductItem product =
                                       group.products[indexProduct];
                                   return Container(
-                                    width: 170,
+                                    width: 220,
                                     padding: EdgeInsets.only(top: 10),
                                     margin: EdgeInsets.all(10),
                                     decoration: BoxDecoration(
@@ -158,16 +163,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                         Container(
                                             margin: EdgeInsets.only(
                                                 top: 10, bottom: 5),
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 15),
                                             child: Text(
                                               _textFormat(product.name),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.w500),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),
                                             )),
                                         Container(
                                             margin: EdgeInsets.only(bottom: 5),
                                             alignment: Alignment.centerLeft,
-                                            padding: EdgeInsets.only(left: 24),
+                                            padding: EdgeInsets.only(left: 15),
                                             child: Text(
                                               'R\$: ${product.price.toStringAsFixed(2)}',
                                               textAlign: TextAlign.left,
