@@ -19,7 +19,7 @@ class ProductItem {
       name: json["name"] as String,
       price: json["prices"][0]["price"] as double,
       description: json["description"] as String,
-      image: json["image"][0] as String,
+      image: json["images"][0] as String,
     );
   }
 }
