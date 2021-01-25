@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:challengeinstabuy/components/bannerCollections.dart';
 import 'package:challengeinstabuy/models/BannerResult.dart';
 import 'package:challengeinstabuy/models/GroupProducts.dart';
+import 'package:challengeinstabuy/models/ProductItem.dart';
 import 'package:challengeinstabuy/models/ProductsResults.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -100,9 +101,52 @@ class _MyHomePageState extends State<MyHomePage> {
                       physics: ClampingScrollPhysics(),
                       itemCount: snapshot.data.groupsProducts.length,
                       itemBuilder: (BuildContext context, int index) {
+                        // return Row(
+                        //   children: <Widget>[
+                        //     Text(group.title),
+                        //     ListView.builder(
+                        //       scrollDirection: Axis.horizontal,
+                        //       shrinkWrap: true,
+                        //       physics: ClampingScrollPhysics(),
+                        //       itemCount: snapshot
+                        //           .data.groupsProducts[index].products.length,
+                        //       itemBuilder:
+                        //           (BuildContext context, int indexProduct) {
+                        //         ProductItem group = snapshot
+                        //             .data
+                        //             .groupsProducts[index]
+                        //             .products[indexProduct];
+                        //         return Column(
+                        //           children: <Widget>[
+                        //             Text(group.name),
+                        //           ],
+                        //         );
+                        //       },
+                        //     ),
+                        //   ],
+                        // );
+
                         GroupProduct group =
                             snapshot.data.groupsProducts[index];
-                        return Text(group.title);
+
+                        return new Container(
+                          margin: EdgeInsets.symmetric(vertical: 20.0),
+                          height: 200.0,
+                          child: new ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: group.products.length,
+                            itemBuilder:
+                                (BuildContext context, int indexProduct) {
+                              ProductItem product =
+                                  group.products[indexProduct];
+                              return Column(
+                                children: <Widget>[
+                                  Text(product.name),
+                                ],
+                              );
+                            },
+                          ),
+                        );
                       },
                     )
                   : Center(child: CircularProgressIndicator());
