@@ -101,51 +101,45 @@ class _MyHomePageState extends State<MyHomePage> {
                       physics: ClampingScrollPhysics(),
                       itemCount: snapshot.data.groupsProducts.length,
                       itemBuilder: (BuildContext context, int index) {
-                        // return Row(
-                        //   children: <Widget>[
-                        //     Text(group.title),
-                        //     ListView.builder(
-                        //       scrollDirection: Axis.horizontal,
-                        //       shrinkWrap: true,
-                        //       physics: ClampingScrollPhysics(),
-                        //       itemCount: snapshot
-                        //           .data.groupsProducts[index].products.length,
-                        //       itemBuilder:
-                        //           (BuildContext context, int indexProduct) {
-                        //         ProductItem group = snapshot
-                        //             .data
-                        //             .groupsProducts[index]
-                        //             .products[indexProduct];
-                        //         return Column(
-                        //           children: <Widget>[
-                        //             Text(group.name),
-                        //           ],
-                        //         );
-                        //       },
-                        //     ),
-                        //   ],
-                        // );
-
                         GroupProduct group =
                             snapshot.data.groupsProducts[index];
 
-                        return new Container(
-                          margin: EdgeInsets.symmetric(vertical: 20.0),
-                          height: 200.0,
-                          child: new ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: group.products.length,
-                            itemBuilder:
-                                (BuildContext context, int indexProduct) {
-                              ProductItem product =
-                                  group.products[indexProduct];
-                              return Column(
-                                children: <Widget>[
-                                  Text(product.name),
-                                ],
-                              );
-                            },
-                          ),
+                        return Column(
+                          children: <Widget>[
+                            Container(
+                              child: Text(
+                                group.title,
+                                style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.all(20.0),
+                            ),
+                            new Container(
+                              margin: EdgeInsets.symmetric(vertical: 20.0),
+                              height: 200.0,
+                              child: new ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: group.products.length,
+                                itemBuilder:
+                                    (BuildContext context, int indexProduct) {
+                                  ProductItem product =
+                                      group.products[indexProduct];
+                                  return Column(
+                                    children: <Widget>[
+                                      Image.network(
+                                          'https://assets.instabuy.com.br/ib.item.image.small/s-${product.image}'),
+                                      Text(product.name),
+                                      Text('${product.price}')
+                                    ],
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         );
                       },
                     )
