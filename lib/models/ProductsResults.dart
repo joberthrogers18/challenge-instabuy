@@ -5,7 +5,7 @@ class ProductResults {
 
   ProductResults(this.groupsProducts);
 
-  factory ProductResults.formJson(Map<String, dynamic> json) {
+  factory ProductResults.fromJson(Map<String, dynamic> json) {
     final groups = (json["data"]["collection_items"] as List)
         .cast<Map<String, dynamic>>()
         ?.map(

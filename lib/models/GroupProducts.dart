@@ -2,12 +2,12 @@ import 'package:challengeinstabuy/models/ProductItem.dart';
 
 class GroupProduct {
   final String id;
-  final String name;
+  final String title;
   final List<ProductItem> products;
 
   GroupProduct({
     this.id,
-    this.name,
+    this.title,
     this.products,
   });
 
@@ -19,7 +19,7 @@ class GroupProduct {
 
     return GroupProduct(
         id: json["id"] as String,
-        name: json["name"] as String,
+        title: json["title"] as String,
         products: listProducts);
   }
 }

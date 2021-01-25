@@ -17,7 +17,7 @@ class ProductItem {
     return ProductItem(
       id: json["id"] as String,
       name: json["name"] as String,
-      price: json["prices"]["price"] as double,
+      price: json["prices"][0]["price"] as double,
       description: json["description"] as String,
       image: json["image"] as String,
     );
