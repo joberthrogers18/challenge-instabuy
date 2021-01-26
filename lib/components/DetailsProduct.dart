@@ -121,8 +121,6 @@ class _DetailsProduct extends State<DetailsProduct> {
                                   fontSize: 15
                                 ),
                               ),
-                              // alignment: Alignment.topLeft,
-                              // margin: EdgeInsets.only(bottom: 10),
                               flex: 1,
                             ),
                             Expanded(
