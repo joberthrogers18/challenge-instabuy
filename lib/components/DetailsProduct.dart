@@ -1,3 +1,4 @@
+import 'package:challengeinstabuy/utils/TextManipulation.dart';
 import 'package:flutter/material.dart';
 import 'package:challengeinstabuy/models/SearchItem.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -15,26 +16,6 @@ class DetailsProduct extends StatefulWidget {
 }
 
 class _DetailsProduct extends State<DetailsProduct> {
-  String _htmlTransform(String html) {
-    var htmlSplit = html.split('<br>');
-
-    var parserBr = htmlSplit.where((e) => e.length > 50 ).toList();
-
-    if (parserBr.isNotEmpty) {
-      var removeHeaders = parserBr[0].split(new RegExp(r"<\/?h?[0-6]>"));
-      var getDescription = removeHeaders.where((e) => e.length > 50 ).toList();
-
-      if (getDescription.length > 0) {
-        if (getDescription[0].length > 270) {
-          return '${getDescription[0].substring(0, 270)}...';
-        }
-
-        return getDescription[0];
-      }
-    }
-
-    return 'Sem Descrição';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +106,7 @@ class _DetailsProduct extends State<DetailsProduct> {
                             ),
                             Expanded(
                               child: Html(
-                                data: _htmlTransform(widget.description),
+                                data: TextManipulation.htmlTransform(widget.description),
                               ),
                               flex: 4,
                             )
