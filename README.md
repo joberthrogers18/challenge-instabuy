@@ -1,5 +1,9 @@
 # Desafio InstaBuy
 
+## Fluxo da Aplicação
+
+![fluxo](https://i.imgur.com/dYc2JsH.gif)
+
 ## Screenshots
 
 #### Splash Screen
