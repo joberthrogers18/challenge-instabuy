@@ -12,7 +12,7 @@ class ProductResults {
       (item) {
         return GroupProduct.fromJson(item);
       },
-    ).toList();
+    )?.toList();
 
     return ProductResults(groups);
   }

@@ -1,14 +1,8 @@
 import 'package:challengeinstabuy/components/ListProducts.dart';
-import 'package:challengeinstabuy/models/GroupProducts.dart';
-import 'package:challengeinstabuy/models/ProductItem.dart';
-import 'package:challengeinstabuy/models/ProductsResults.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:challengeinstabuy/blocs/search_bloc.dart';
-import 'package:challengeinstabuy/components/DetailsProduct.dart';
 import 'package:challengeinstabuy/services/data/instaBuyService.dart';
 import 'package:challengeinstabuy/components/Caroseul.dart';
-import 'package:challengeinstabuy/components/DetailsProduct.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,23 +26,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // SearchBloc _searchBloc;
 
   @override
   void initState() {
-    // _searchBloc = SearchBloc();
     super.initState();
   }
 
   @override
   void dispose() {
-    // _searchBloc?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    InstaBuyService _service = InstaBuyService();
 
     return Scaffold(
       appBar: AppBar(

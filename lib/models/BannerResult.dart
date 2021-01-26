@@ -14,7 +14,7 @@ class BannerResult {
           },
         )
         ?.where((i) => i.isMobile == true)
-        .toList();
+        ?.toList();
 
     return BannerResult(listItems);
   }

@@ -9,13 +9,5 @@ Widget bannerCollections(BuildContext context, BannerItem item) {
       height: 300,
     ),
     subtitle: Text(item?.id ?? ""),
-    // onTap: () => Navigator.push(
-    //   context,
-    //   CupertinoPageRoute(
-    //     builder: (context) => DetailsWidget(
-    //       item: item,
-    //     ),
-    //   ),
-    // ),
   );
 }

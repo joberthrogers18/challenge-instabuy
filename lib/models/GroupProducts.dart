@@ -15,7 +15,7 @@ class GroupProduct {
     final listProducts =
         (json["items"] as List).cast<Map<String, dynamic>>()?.map((product) {
       return ProductItem.fromJson(product);
-    }).toList();
+    })?.toList();
 
     return GroupProduct(
         id: json["id"] as String,
